@@ -12,6 +12,7 @@ public class Main {
         basicDataSource.setUrl("jdbc:mysql://localhost:3306/cardealership");
         basicDataSource.setUsername(args[0]);
         basicDataSource.setPassword(args[1]);
-
+        UserInterface.setDataSource(basicDataSource);
+        UserInterface.init();
     }
 }

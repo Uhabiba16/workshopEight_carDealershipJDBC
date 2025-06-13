@@ -49,7 +49,7 @@ public class Dealership {
 
     @Override
     public String toString() {
-        return "Dealership{" +
+        return "\n Dealership{" +
                 "dealershipId=" + dealershipId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +

@@ -7,14 +7,14 @@ public class Vehicle {
     private String model;
     private String type;
     private String color;
-    private String odometer;
+    private int odometer;
     private int price;
     private boolean sold;
 
     public Vehicle() {
     }
 
-    public Vehicle(String vin, int year, String make, String model, String type, String color, String odometer,int price, boolean sold) {
+    public Vehicle(String vin, int year, String make, String model, String type, String color, int odometer, int price, boolean sold) {
         this.vin = vin;
         this.year = year;
         this.make = make;
@@ -22,7 +22,7 @@ public class Vehicle {
         this.type = type;
         this.color = color;
         this.odometer = odometer;
-        this.price= price;
+        this.price = price;
         this.sold = sold;
     }
 
@@ -74,11 +74,11 @@ public class Vehicle {
         this.color = color;
     }
 
-    public String getOdometer() {
+    public int getOdometer() {
         return odometer;
     }
 
-    public void setOdometer(String odometer) {
+    public void setOdometer(int odometer) {
         this.odometer = odometer;
     }
 

@@ -57,11 +57,11 @@ public class UserInterface {
         int vehicleCommand;
         do {
             System.out.println("Your options are:");
-            System.out.println("1) Show All Dealerships");
+            System.out.println("1) Show All Vehicles");
             System.out.println("2) Filter by Vehicle Detail");
             System.out.println("3) Add A New Vehicle");
-            System.out.println("4) Modify Existing vehicle");
-            System.out.println("5) Delete Existing vehicle");
+            System.out.println("4) Modify Existing Vehicle");
+            System.out.println("5) Delete Existing Vehicle");
             System.out.println("0) Back to Main Menu");
             System.out.print("Option:");
 
@@ -75,13 +75,13 @@ public class UserInterface {
                     filterVehicle();
                     break;
                 case 3:
-//                    createVehicle();
+                    createVehicle(vehicleDAO);
                     break;
                 case 4:
-//                    updateVehicle();
+                    updateVehicle(vehicleDAO);
                     break;
                 case 5:
-//                    deleteVehicle();
+                    deleteVehicle(vehicleDAO);
                     break;
                 case 0:
                     System.out.println("Going back to Main Menu");
@@ -90,7 +90,71 @@ public class UserInterface {
                     System.out.println("Invalid command, Try Again!");
             }
         } while (vehicleCommand != 0);
-    }
+    }//Done
+
+    private static void deleteVehicle(VehicleDAO vehicleDAO) {
+        scanner.nextLine();
+        System.out.print("Please provide the Vehicle VIN to delete: ");
+        String vin = scanner.nextLine();
+
+        vehicleDAO.deleteVehicle(vin);
+    }//Done
+
+    private static void updateVehicle(VehicleDAO vehicleDAO) {
+        scanner.nextLine();
+        System.out.print("Please provide vehicle VIN to update:");
+        String vin=scanner.nextLine();
+
+        System.out.print("Year:");
+        int year=scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Make:");
+        String make=scanner.nextLine();
+        System.out.print("Model:");
+        String model=scanner.nextLine();
+        System.out.print("Type:");
+        String type=scanner.nextLine();
+        System.out.print("Color:");
+        String color=scanner.nextLine();
+        System.out.print("Odometer:");
+        int odometer=scanner.nextInt();
+        System.out.print("Price:");
+        int price=scanner.nextInt();
+        System.out.print("Sold:");
+        boolean sold=scanner.nextBoolean();
+        Vehicle vehicleToUpdate= new Vehicle("",year,make,model,type,color,odometer,price,sold);
+
+        vehicleDAO.updateVehicle(vin,vehicleToUpdate);
+    }//Done
+
+    private static void createVehicle(VehicleDAO vehicleDAO) {
+        scanner.nextLine();
+        System.out.println("Please Provide Following Details:");
+        System.out.print("VIN:");
+        String vin=scanner.nextLine();
+        System.out.print("Year:");
+        int year=scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Make:");
+        String make=scanner.nextLine();
+        System.out.print("Model:");
+        String model=scanner.nextLine();
+        System.out.print("Type:");
+        String type=scanner.nextLine();
+        System.out.print("Color:");
+        String color=scanner.nextLine();
+        System.out.print("Odometer:");
+        int odometer=scanner.nextInt();
+        System.out.print("Price:");
+        int price=scanner.nextInt();
+        System.out.print("Sold:");
+        boolean sold=scanner.nextBoolean();
+
+        Vehicle vehToCreate= new Vehicle(vin,year,make,model,type,color,odometer,price,sold);
+
+        vehicleDAO.createVehicle(vehToCreate);
+
+    }//Done
 
     private static void filterVehicle() {
         VehicleDAO vehicleDAO = new VehicleDAO(basicDataSource);
@@ -103,7 +167,8 @@ public class UserInterface {
             System.out.println("3) Filter by Make/Model");
             System.out.println("4) Filter by Year Range");
             System.out.println("5) Filter by Price Range");
-            System.out.println("5) Filter by Mileage Range");
+            System.out.println("6) Filter by Mileage Range");
+            System.out.println("0) Back to Vehicle Menu");
             System.out.print("Option:");
 
             filterMenuCommand = scanner.nextInt();
@@ -115,16 +180,16 @@ public class UserInterface {
                     filterByType(vehicleDAO);
                     break;
                 case 3:
-                    //todo add filter by make/model
+                    filterByMakeModel(vehicleDAO);
                     break;
                 case 4:
                     filterByYear(vehicleDAO);
                     break;
                 case 5:
-                    filterByPrice();//TODO
+                    filterByPrice(vehicleDAO);
                     break;
                 case 6:
-                    //todo add filter by mileage range
+                    filterByMileage(vehicleDAO);
                     break;
                 case 0:
                     System.out.println("Going Back to Vehicle Menu...");
@@ -133,7 +198,7 @@ public class UserInterface {
                     System.out.println("Invalid command, Try Again!");
             }
         } while (filterMenuCommand != 0);
-    }
+    }//Done
 
     private static void filerByColor(VehicleDAO vehicleDAO) {
         scanner.nextLine();
@@ -153,6 +218,17 @@ public class UserInterface {
         System.out.println(vehiclesByType);
     }//Done
 
+    private static void filterByMakeModel(VehicleDAO vehicleDAO) {
+        scanner.nextLine();
+        System.out.print("Please Provide Vehicle Make:");
+        String  make = scanner.nextLine();
+        System.out.print("Please Provide Vehicle Model:");
+        String model = scanner.nextLine();
+
+        List<Vehicle> vehiclesByMakeModel = vehicleDAO.getByMakeModel(make, model);
+        System.out.println(vehiclesByMakeModel);
+    }//Done
+
     private static void filterByYear(VehicleDAO vehicleDAO) {
         scanner.nextLine();
         System.out.print("Please Provide Vehicle Year From:");
@@ -160,12 +236,31 @@ public class UserInterface {
         System.out.print("Please Provide Vehicle Year To:");
         int toYear = scanner.nextInt();
 
-        List<Vehicle> vehiclesByYear = vehicleDAO.getByYear(fromYear,toYear);
+        List<Vehicle> vehiclesByYear = vehicleDAO.getByYear(fromYear, toYear);
         System.out.println(vehiclesByYear);
     }//Done
 
-    private static void filterByPrice() {
-    }
+    private static void filterByPrice(VehicleDAO vehicleDAO) {
+        scanner.nextLine();
+        System.out.print("Please Provide Vehicle Minimum Price:");
+        int min = scanner.nextInt();
+        System.out.print("Please Provide Vehicle Maximum Price:");
+        int max = scanner.nextInt();
+
+        List<Vehicle> vehiclesByPrice = vehicleDAO.getByPrice(min, max);
+        System.out.println(vehiclesByPrice);
+    }//Done
+
+    private static void filterByMileage(VehicleDAO vehicleDAO) {
+        scanner.nextLine();
+        System.out.print("Please Provide Vehicle Starting Mileage:");
+        String startMileage = scanner.nextLine();
+        System.out.print("Please Provide Vehicle Ending Mileage:");
+        String endMileage = scanner.nextLine();
+
+        List<Vehicle> vehiclesByMileage = vehicleDAO.getByMileage(startMileage, endMileage);
+        System.out.println(vehiclesByMileage);
+    }//Done
 
     private static void dealership() {
         DealershipDAO dealershipDAO = new DealershipDAO(basicDataSource);
